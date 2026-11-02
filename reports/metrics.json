@@ -1,0 +1,41 @@
+{
+  "conjunto": "prueba",
+  "n_clientes": 1500,
+  "tasa_real_abandono": 0.204,
+  "roc_auc": 0.8655559934750003,
+  "pr_auc": 0.7011538364073877,
+  "brier_sin_calibrar": 0.13719342648983002,
+  "brier_calibrado": 0.10251351054705984,
+  "ece_sin_calibrar": 0.1582886313547691,
+  "ece_calibrado": 0.02216631653004808,
+  "prob_media_sin_calibrar": 0.3622886538505554,
+  "prob_media_calibrada": 0.21065089859337738,
+  "umbral_0.5": {
+    "matriz_confusion": [
+      [
+        993,
+        201
+      ],
+      [
+        81,
+        225
+      ]
+    ],
+    "recall_abandono": 0.7352941176470589,
+    "precision_abandono": 0.528169014084507,
+    "f1_abandono": 0.6147540983606558,
+    "accuracy": 0.812
+  },
+  "importancia_shap": {
+    "NumOfProducts": 0.1651,
+    "Age": 0.1154,
+    "IsActiveMember": 0.0712,
+    "Gender": 0.0455,
+    "Balance": 0.0452,
+    "Geography": 0.0419,
+    "CreditScore": 0.0136,
+    "EstimatedSalary": 0.0122,
+    "Tenure": 0.0102,
+    "HasCrCard": 0.0074
+  }
+}

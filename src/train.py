@@ -7,7 +7,7 @@ import json
 import matplotlib.pyplot as plt
 from tensorflow import keras
 
-from src import config, preprocessing
+from src import calibration, config, preprocessing
 from src.model import build_mlp, get_class_weights, train_mlp
 
 HISTORY_FILE = config.MODELS_DIR / "training_history.json"
@@ -55,6 +55,10 @@ def main() -> None:
     preprocessing.save_preprocessor(prep)
     HISTORY_FILE.write_text(json.dumps(history, indent=2))
     plot_history(history, config.FIGURES_DIR / "05_curvas_entrenamiento.png")
+
+    # Calibración de probabilidades con validación
+    cal = calibration.PlattCalibrator().fit(model.predict(Xva, verbose=0).ravel(), y_val)
+    calibration.save_calibrator(cal)
 
     best = history["val_loss"].index(min(history["val_loss"]))
     print(f"\nÉpocas: {len(history['loss'])} | mejor época: {best + 1}")

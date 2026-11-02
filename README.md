@@ -57,13 +57,17 @@ deep-retention/
 ├── models/              # Modelo entrenado (.keras), preprocesador e historial
 ├── notebooks/
 │   └── 01_eda.ipynb     # Análisis exploratorio de datos
-├── reports/figures/     # Gráficos generados
+├── reports/
+│   ├── figures/         # Gráficos generados
+│   └── metrics.json     # Métricas de evaluación
 ├── src/                 # Código fuente (preprocesamiento, entrenamiento, inferencia)
 │   ├── config.py        # Rutas y parámetros globales (umbrales, catálogo de incentivos)
 │   ├── finance.py       # Regla de ganancia neta, segmentación y KPIs de cartera
 │   ├── preprocessing.py # Carga, división estratificada, escalado y codificación
 │   ├── model.py         # Arquitectura del MLP y entrenamiento
 │   ├── train.py         # Script de entrenamiento
+│   ├── calibration.py   # Calibración de probabilidades (Platt)
+│   ├── evaluate.py      # Métricas, gráficos y SHAP sobre el conjunto de prueba
 │   └── predict.py       # Inferencia con el modelo guardado
 ├── tests/               # Pruebas unitarias
 ├── requirements.txt
@@ -116,6 +120,25 @@ Entrena el MLP y guarda en `models/` el modelo, el preprocesador y el historial 
 - Desbalance: `class_weight` balanceado (abandona ≈ 2.45, se queda ≈ 0.63).
 - Early Stopping sobre `val_loss` con paciencia de 15 épocas.
 - División 70 / 15 / 15 (entrenamiento / validación / prueba), estratificada.
+
+## Evaluación
+
+```bash
+python -m src.evaluate
+```
+
+Resultados sobre el conjunto de prueba (1.500 clientes no vistos en el entrenamiento):
+
+| Métrica | Valor |
+|---|---|
+| ROC-AUC | 0.866 |
+| PR-AUC | 0.701 (azar: 0.204) |
+| Brier Score | 0.137 → **0.103** (sin calibrar → calibrado) |
+| Error de calibración (ECE) | 0.158 → **0.022** |
+
+**Calibración:** `class_weight` hace que la red sobreestime la probabilidad de fuga (promedio predicho 36% frente a 20,4% real). Como la fórmula de ganancia neta usa esa probabilidad directamente, se aplica calibración de Platt ajustada con el conjunto de validación.
+
+**Factores de abandono (SHAP):** número de productos, edad y actividad del cliente, seguidos de género, saldo y país.
 
 ## Pruebas
 
