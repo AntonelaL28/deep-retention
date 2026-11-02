@@ -54,14 +54,17 @@ deep-retention/
 │   ├── raw/             # Datos originales
 │   └── processed/       # Datos procesados
 ├── docs/                # Informe ejecutivo (PDF)
-├── models/              # Modelo entrenado y preprocesador
+├── models/              # Modelo entrenado (.keras), preprocesador e historial
 ├── notebooks/
 │   └── 01_eda.ipynb     # Análisis exploratorio de datos
 ├── reports/figures/     # Gráficos generados
 ├── src/                 # Código fuente (preprocesamiento, entrenamiento, inferencia)
 │   ├── config.py        # Rutas y parámetros globales (umbrales, catálogo de incentivos)
 │   ├── finance.py       # Regla de ganancia neta, segmentación y KPIs de cartera
-│   └── preprocessing.py # Carga, división estratificada, escalado y codificación
+│   ├── preprocessing.py # Carga, división estratificada, escalado y codificación
+│   ├── model.py         # Arquitectura del MLP y entrenamiento
+│   ├── train.py         # Script de entrenamiento
+│   └── predict.py       # Inferencia con el modelo guardado
 ├── tests/               # Pruebas unitarias
 ├── requirements.txt
 └── README.md
@@ -93,6 +96,26 @@ Instalar dependencias:
 ```bash
 pip install -r requirements.txt
 ```
+
+## Entrenamiento del modelo
+
+```bash
+python -m src.train
+```
+
+Entrena el MLP y guarda en `models/` el modelo, el preprocesador y el historial de entrenamiento. El repositorio ya incluye el modelo entrenado, por lo que este paso es opcional.
+
+| Capa | Configuración |
+|---|---|
+| Entrada | 16 variables (escaladas y codificadas) |
+| Oculta 1 | Dense 128 + Batch Normalization + ReLU + Dropout 0.3 |
+| Oculta 2 | Dense 64 + ReLU + Dropout 0.2 |
+| Salida | Dense 1 + Sigmoide (probabilidad de fuga) |
+
+- Optimizador Adam (lr = 0.001), pérdida binary cross-entropy.
+- Desbalance: `class_weight` balanceado (abandona ≈ 2.45, se queda ≈ 0.63).
+- Early Stopping sobre `val_loss` con paciencia de 15 épocas.
+- División 70 / 15 / 15 (entrenamiento / validación / prueba), estratificada.
 
 ## Pruebas
 

@@ -73,3 +73,12 @@ INCENTIVE_CATALOG = {
 # Percentiles del saldo usados para definir los niveles de valor patrimonial.
 TIER_HIGH_QUANTILE = 0.75    # saldo >= p75 -> "Superior"
 TIER_LOW_QUANTILE = 0.40     # saldo >= p40 -> "Medio", si no -> "Bajo"
+
+# Modelo (MLP)
+MODEL_FILE = MODELS_DIR / "deep_retention_mlp.keras"
+HIDDEN_UNITS = (128, 64)
+DROPOUT_RATES = (0.3, 0.2)
+LEARNING_RATE = 1e-3
+BATCH_SIZE = 64
+MAX_EPOCHS = 300
+EARLY_STOPPING_PATIENCE = 15
