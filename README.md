@@ -14,6 +14,17 @@ Ganancia Neta Esperada = (P(fuga) × Efectividad del Incentivo × Margen del Cli
 
 La acción comercial solo se ejecuta si la **Ganancia Neta Esperada > 0**. En caso contrario, el cliente se cataloga como **"Salida Permitida"**.
 
+### Segmentación
+
+| Segmento | Condición | Decisión |
+|---|---|---|
+| A: Alto Valor | Ganancia > 0 y saldo superior | Retención Prioritaria |
+| B: Medio | Ganancia > 0 y saldo medio/bajo | Retención Automatizada |
+| C: No Rentable | Ningún incentivo genera ganancia > 0 (incluye clientes deficitarios) | Salida Permitida |
+| D: Estable | P(fuga) < 0.30 | Sin Acción Requerida |
+
+Para probabilidades entre 0.30 y 0.65 (rango no cubierto por la matriz original) la decisión la toma directamente la fórmula de ganancia neta. Entre los incentivos permitidos para cada cliente se elige el que maximiza la ganancia.
+
 ## Componentes
 
 | Componente | Descripción |
@@ -37,20 +48,45 @@ deep-retention/
 ├── notebooks/           # Análisis exploratorio y experimentos
 ├── reports/figures/     # Gráficos generados
 ├── src/                 # Código fuente (preprocesamiento, entrenamiento, inferencia)
+│   ├── config.py        # Rutas y parámetros globales (umbrales, catálogo de incentivos)
+│   ├── finance.py       # Regla de ganancia neta, segmentación y KPIs de cartera
+│   └── preprocessing.py # Carga, división estratificada, escalado y codificación
+├── tests/               # Pruebas unitarias
 ├── requirements.txt
 └── README.md
 ```
 
 ## Instalación
 
-Requiere **Python 3.10 – 3.12**.
+Requiere **Python 3.10 – 3.13**.
 
 ```bash
-git clone <url-del-repositorio>
+git clone https://github.com/javier04s/deep-retention.git
 cd deep-retention
 python -m venv venv
-# Windows: venv\Scripts\activate | Linux/Mac: source venv/bin/activate
+```
+
+Activar el entorno virtual:
+
+```bash
+# Windows (Git Bash)
+source venv/Scripts/activate
+# Windows (CMD / PowerShell)
+venv\Scripts\activate
+# Linux / macOS
+source venv/bin/activate
+```
+
+Instalar dependencias:
+
+```bash
 pip install -r requirements.txt
+```
+
+## Pruebas
+
+```bash
+python -m pytest -v
 ```
 
 ## Informe ejecutivo

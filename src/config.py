@@ -25,6 +25,22 @@ RANDOM_STATE = 42
 TEST_SIZE = 0.15         # proporción del conjunto de prueba
 VALIDATION_SIZE = 0.15   # proporción del conjunto de validación
 
+# Dataset
+RAW_DATA_FILE = RAW_DATA_DIR / "Customer-Churn-Records.csv"
+TARGET = "Exited"                                   # 1 = el cliente abandonó
+ID_COLUMNS = ["RowNumber", "CustomerId", "Surname"]  # no aportan información predictiva
+
+# Columnas excluidas por fuga de datos (data leakage): se registran después
+# de que el cliente abandona, por lo que revelan la respuesta.
+LEAKAGE_COLUMNS = ["Complain"]
+
+# Variables candidatas. Solo se usan las que existan en el archivo, así el
+# pipeline funciona con la versión de 10 columnas y con la completa.
+NUMERIC_FEATURES = ["CreditScore", "Age", "Tenure", "Balance", "NumOfProducts",
+                    "EstimatedSalary", "Satisfaction Score", "Point Earned"]
+BINARY_FEATURES = ["HasCrCard", "IsActiveMember"]
+CATEGORICAL_FEATURES = ["Geography", "Gender", "Card Type"]
+
 
 # Parámetros financieros (lógica de retención)
 # Umbrales de probabilidad de fuga (matriz de decisión comercial).
