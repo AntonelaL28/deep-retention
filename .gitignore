@@ -1,0 +1,28 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# --- Entornos virtuales ---
+venv/
+.venv/
+env/
+
+# --- Jupyter ---
+.ipynb_checkpoints/
+
+# --- Streamlit ---
+.streamlit/secrets.toml
+
+# --- Variables de entorno ---
+.env
+
+# --- Sistema operativo / editores ---
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# NOTA: los datos (data/) y el modelo entrenado (models/) SÍ se versionan
+# para garantizar la reproducibilidad exigida en la rúbrica.
