@@ -35,6 +35,16 @@ Para probabilidades entre 0.30 y 0.65 (rango no cubierto por la matriz original)
 | Aplicación (Streamlit) | Buscador por cliente, panel de cartera y simulador de parámetros |
 | Informe ejecutivo | Resultados financieros (ROI), métricas del modelo y explicabilidad (SHAP) |
 
+## Dataset
+
+`data/raw/Customer-Churn-Records.csv`: 10.000 clientes de un banco europeo (Francia, Alemania y España) con 18 columnas. La variable objetivo es `Exited` (1 = abandonó), con un **20,4%** de abandono.
+
+Decisiones del análisis exploratorio ([notebooks/01_eda.ipynb](notebooks/01_eda.ipynb)):
+
+- Se excluye `Complain` por **fuga de datos** (correlación 0,996 con `Exited`).
+- Se excluyen `Card Type`, `Satisfaction Score` y `Point Earned` por no tener asociación con el abandono.
+- `NumOfProducts` se trata como categórica por su relación no lineal con el abandono.
+
 ## Estructura del repositorio
 
 ```
@@ -45,7 +55,8 @@ deep-retention/
 │   └── processed/       # Datos procesados
 ├── docs/                # Informe ejecutivo (PDF)
 ├── models/              # Modelo entrenado y preprocesador
-├── notebooks/           # Análisis exploratorio y experimentos
+├── notebooks/
+│   └── 01_eda.ipynb     # Análisis exploratorio de datos
 ├── reports/figures/     # Gráficos generados
 ├── src/                 # Código fuente (preprocesamiento, entrenamiento, inferencia)
 │   ├── config.py        # Rutas y parámetros globales (umbrales, catálogo de incentivos)

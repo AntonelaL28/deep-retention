@@ -34,12 +34,13 @@ ID_COLUMNS = ["RowNumber", "CustomerId", "Surname"]  # no aportan información p
 # de que el cliente abandona, por lo que revelan la respuesta.
 LEAKAGE_COLUMNS = ["Complain"]
 
-# Variables candidatas. Solo se usan las que existan en el archivo, así el
-# pipeline funciona con la versión de 10 columnas y con la completa.
-NUMERIC_FEATURES = ["CreditScore", "Age", "Tenure", "Balance", "NumOfProducts",
-                    "EstimatedSalary", "Satisfaction Score", "Point Earned"]
+# Variables del modelo (definidas en el EDA, notebooks/01_eda.ipynb).
+# Se excluyen Card Type, Satisfaction Score y Point Earned por no tener
+# asociación con el abandono. NumOfProducts se trata como categórica.
+# Solo se usan las que existan en el archivo.
+NUMERIC_FEATURES = ["CreditScore", "Age", "Tenure", "Balance", "EstimatedSalary"]
 BINARY_FEATURES = ["HasCrCard", "IsActiveMember"]
-CATEGORICAL_FEATURES = ["Geography", "Gender", "Card Type"]
+CATEGORICAL_FEATURES = ["Geography", "Gender", "NumOfProducts"]
 
 
 # Parámetros financieros (lógica de retención)

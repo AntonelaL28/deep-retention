@@ -54,14 +54,14 @@ def test_preprocesador_se_ajusta_solo_con_train(df):
     Xt = prep.transform(X_tr)
     names = list(prep.get_feature_names_out())
 
-    # 5 numéricas + 3 países + 2 géneros
-    assert Xt.shape[1] == 10
+    # 4 numéricas + 3 países + 2 géneros + 4 valores de NumOfProducts
+    assert Xt.shape[1] == 13
     assert "Complain" not in names
     # Las numéricas quedan con media ~0 en train (escalado ajustado en train)
     num_idx = [names.index(c) for c in ["CreditScore", "Age", "Balance"]]
     assert np.allclose(Xt[:, num_idx].mean(axis=0), 0, atol=1e-9)
     # Validación se transforma sin errores con el mismo preprocesador
-    assert prep.transform(X_va).shape[1] == 10
+    assert prep.transform(X_va).shape[1] == 13
 
 
 def test_guardar_y_cargar(df, tmp_path):
