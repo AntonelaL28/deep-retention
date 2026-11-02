@@ -1,0 +1,26 @@
+{
+  "clientes_analizados": 10000,
+  "clientes_alto_riesgo": 760,
+  "clientes_a_intervenir": 1782,
+  "salidas_permitidas": 458,
+  "capital_en_riesgo": 64134413.099999994,
+  "capital_clientes_intervenidos": 197705902.69,
+  "capital_rescatable": 39707276.2288499,
+  "inversion_total": 205950.0,
+  "margen_rescatado_esperado": 859395.8346747457,
+  "ganancia_neta_total": 653445.8346747457,
+  "clientes_retenidos_esperados": 339.9755986513493,
+  "roi": 3.1728372647474905,
+  "umbrales_valor": {
+    "superior": 2804.8871950000002,
+    "medio": 1789.27548
+  },
+  "sin_filtro_rentabilidad": {
+    "clientes_intervenidos": 2240,
+    "inversion_total": 224270.0,
+    "ganancia_neta_total": 639830.4165239786,
+    "roi": 2.8529469680473474,
+    "perdida_evitada_por_filtro": 13615.41815076716,
+    "inversion_evitada_por_filtro": 18320.0
+  }
+}

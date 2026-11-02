@@ -10,7 +10,7 @@ CATALOG = {
     "BONO": {"name": "Bono", "cost": 20.0, "effectiveness": 0.2,
              "tiers": ["Superior", "Medio", "Bajo"]},
 }
-THRESHOLDS = (10_000.0, 1_000.0)  # saldo alto, saldo bajo
+THRESHOLDS = (1_500.0, 500.0)  # margen alto, margen bajo
 
 
 def _decide(rows):
@@ -40,7 +40,7 @@ def test_cliente_deficitario_es_salida_permitida():
 
 
 def test_ganancia_negativa_bloquea_gasto():
-    # Medio: solo Bono -> 0.7*0.2*100-20 = -6 < 0
+    # Bajo: solo Bono -> 0.7*0.2*100-20 = -6 < 0
     r = _decide([[0.7, 5_000, 100]]).iloc[0]
     assert r["decision"] == "Salida Permitida"
     assert r["ganancia_neta_esperada"] == 0
@@ -73,3 +73,22 @@ def test_resumen_de_cartera_y_roi():
     assert s["ganancia_neta_total"] == pytest.approx(880)
     assert s["roi"] == pytest.approx(880 / 120)
     assert s["capital_en_riesgo"] == pytest.approx(100_000)
+
+
+def test_estimar_margen():
+    import pandas as pd
+    df = pd.DataFrame({"Balance": [100_000, 0], "NumOfProducts": [2, 1],
+                       "HasCrCard": [1, 0], "Card Type": ["GOLD", "SILVER"],
+                       "EstimatedSalary": [50_000, 10_000], "IsActiveMember": [1, 0]})
+    m = finance.estimate_margin(df)
+    # 2000 + 100 + 80 + 200 - 180 = 2200 ; 0 + 50 + 0 + 10 - 180 = -120
+    assert m.tolist() == pytest.approx([2200, -120])
+
+
+def test_filtro_evita_perdidas():
+    decided = _decide([[0.9, 50_000, 2_000], [0.9, 0, -300], [0.1, 0, 100]])
+    r = finance.without_profit_filter(decided, fallback_code="BONO", catalog=CATALOG)
+    # El deficitario recibiría Bono: 0.9*0.2*(-300) - 20 = -74
+    assert r["inversion_evitada_por_filtro"] == pytest.approx(20)
+    assert r["perdida_evitada_por_filtro"] == pytest.approx(74)
+    assert r["ganancia_neta_total"] == pytest.approx(800 - 74)

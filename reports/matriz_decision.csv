@@ -1,0 +1,5 @@
+segmento,decision,clientes,costo_total,ganancia_neta
+A: Alto Valor / Alto Riesgo,Retención Prioritaria,559,124110.0,318047.40152585076
+B: Medio / Riesgo Moderado,Retención Automatizada,1223,81840.0,335398.433148895
+C: No Rentable,Salida Permitida,458,0.0,0.0
+D: Estable,Sin Acción Requerida,7760,0.0,0.0

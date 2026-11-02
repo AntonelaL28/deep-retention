@@ -70,9 +70,20 @@ INCENTIVE_CATALOG = {
     },
 }
 
-# Percentiles del saldo usados para definir los niveles de valor patrimonial.
-TIER_HIGH_QUANTILE = 0.75    # saldo >= p75 -> "Superior"
-TIER_LOW_QUANTILE = 0.40     # saldo >= p40 -> "Medio", si no -> "Bajo"
+# Percentiles del margen (clientes rentables) para los niveles de valor.
+TIER_HIGH_QUANTILE = 0.75    # margen >= p75 -> "Superior"
+TIER_LOW_QUANTILE = 0.40     # margen >= p40 -> "Medio", si no -> "Bajo"
+
+# Supuestos del margen anual neto por cliente ($/año).
+MARGIN_PARAMS = {
+    "balance_spread": 0.02,             # margen de interés sobre el saldo
+    "fee_per_product": 50.0,            # comisiones por producto contratado
+    "card_income": {"SILVER": 40.0, "GOLD": 80.0,   # ingreso anual por tarjeta
+                    "PLATINUM": 120.0, "DIAMOND": 160.0},
+    "transaction_rate_active": 0.004,   # comisiones transaccionales (% del salario)
+    "transaction_rate_inactive": 0.001,
+    "operating_cost": 180.0,            # costo anual de servir al cliente
+}
 
 # Modelo (MLP)
 MODEL_FILE = MODELS_DIR / "deep_retention_mlp.keras"

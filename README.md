@@ -18,12 +18,36 @@ La acción comercial solo se ejecuta si la **Ganancia Neta Esperada > 0**. En ca
 
 | Segmento | Condición | Decisión |
 |---|---|---|
-| A: Alto Valor | Ganancia > 0 y saldo superior | Retención Prioritaria |
-| B: Medio | Ganancia > 0 y saldo medio/bajo | Retención Automatizada |
+| A: Alto Valor | Ganancia > 0 y valor superior | Retención Prioritaria |
+| B: Medio | Ganancia > 0 y valor medio/bajo | Retención Automatizada |
 | C: No Rentable | Ningún incentivo genera ganancia > 0 (incluye clientes deficitarios) | Salida Permitida |
 | D: Estable | P(fuga) < 0.30 | Sin Acción Requerida |
 
-Para probabilidades entre 0.30 y 0.65 (rango no cubierto por la matriz original) la decisión la toma directamente la fórmula de ganancia neta. Entre los incentivos permitidos para cada cliente se elige el que maximiza la ganancia.
+Para probabilidades entre 0.30 y 0.65 (rango no cubierto por la matriz original) la decisión la toma directamente la fórmula de ganancia neta. Entre los incentivos permitidos para cada cliente se elige el que maximiza la ganancia. El nivel de valor se define por el **margen anual** del cliente (no por el saldo, ya que el 36% de los clientes tiene saldo 0).
+
+### Margen del cliente (supuestos)
+
+```
+Margen anual = 2% × Saldo + $50 × Productos + Ingreso por tarjeta + Comisiones transaccionales − $180
+```
+
+| Componente | Supuesto |
+|---|---|
+| Margen de interés | 2% del saldo |
+| Comisiones por producto | $50 por producto |
+| Tarjeta de crédito | $40 (Silver), $80 (Gold), $120 (Platinum), $160 (Diamond) |
+| Comisiones transaccionales | 0,4% del salario si es activo; 0,1% si es inactivo |
+| Costo de servicio | $180 por cliente al año |
+
+### Catálogo de incentivos
+
+| Incentivo | Costo | Efectividad | Niveles de valor |
+|---|---|---|---|
+| Gestor VIP y Tarifa Plana | $250 | 45% | Superior |
+| Exoneración de Comisiones | $80 | 30% | Superior, Medio |
+| Bonificación Transaccional | $40 | 25% | Todos (excepto deficitarios) |
+
+Todos los supuestos están en `src/config.py` y se pueden ajustar en el simulador de la aplicación.
 
 ## Componentes
 
@@ -52,14 +76,16 @@ deep-retention/
 ├── app/                 # Aplicación interactiva (Streamlit)
 ├── data/
 │   ├── raw/             # Datos originales
-│   └── processed/       # Datos procesados
+│   └── processed/       # Cartera evaluada (probabilidad, margen y decisión por cliente)
 ├── docs/                # Informe ejecutivo (PDF)
 ├── models/              # Modelo entrenado (.keras), preprocesador e historial
 ├── notebooks/
 │   └── 01_eda.ipynb     # Análisis exploratorio de datos
 ├── reports/
 │   ├── figures/         # Gráficos generados
-│   └── metrics.json     # Métricas de evaluación
+│   ├── metrics.json     # Métricas de evaluación
+│   ├── resumen_cartera.json  # KPIs financieros de la cartera
+│   └── matriz_decision.csv   # Matriz de decisión por segmento
 ├── src/                 # Código fuente (preprocesamiento, entrenamiento, inferencia)
 │   ├── config.py        # Rutas y parámetros globales (umbrales, catálogo de incentivos)
 │   ├── finance.py       # Regla de ganancia neta, segmentación y KPIs de cartera
@@ -68,7 +94,8 @@ deep-retention/
 │   ├── train.py         # Script de entrenamiento
 │   ├── calibration.py   # Calibración de probabilidades (Platt)
 │   ├── evaluate.py      # Métricas, gráficos y SHAP sobre el conjunto de prueba
-│   └── predict.py       # Inferencia con el modelo guardado
+│   ├── predict.py       # Inferencia con el modelo guardado
+│   └── portfolio.py     # Aplica el sistema completo a la cartera
 ├── tests/               # Pruebas unitarias
 ├── requirements.txt
 └── README.md
@@ -139,6 +166,25 @@ Resultados sobre el conjunto de prueba (1.500 clientes no vistos en el entrenami
 **Calibración:** `class_weight` hace que la red sobreestime la probabilidad de fuga (promedio predicho 36% frente a 20,4% real). Como la fórmula de ganancia neta usa esa probabilidad directamente, se aplica calibración de Platt ajustada con el conjunto de validación.
 
 **Factores de abandono (SHAP):** número de productos, edad y actividad del cliente, seguidos de género, saldo y país.
+
+## Resultados sobre la cartera
+
+```bash
+python -m src.portfolio
+```
+
+| Indicador | Valor |
+|---|---|
+| Clientes analizados | 10.000 |
+| Clientes en riesgo (P ≥ 0.30) | 2.240 |
+| Clientes a intervenir (A + B) | 1.782 |
+| Salidas permitidas (C) | 458 |
+| Capital en riesgo crítico (P ≥ 0.65) | $64,1 M |
+| Inversión en retención | $205.950 |
+| Ganancia neta esperada | $653.446 |
+| **ROI** | **317%** |
+
+Frente a retener a todos los clientes en riesgo sin filtro de rentabilidad, el sistema evita invertir $18.320 en clientes no rentables y $13.615 de pérdida esperada (ROI 285% → 317%).
 
 ## Pruebas
 
