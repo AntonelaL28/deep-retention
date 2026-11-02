@@ -73,11 +73,12 @@ Decisiones del análisis exploratorio ([notebooks/01_eda.ipynb](notebooks/01_eda
 
 ```
 deep-retention/
-├── app/                 # Aplicación interactiva (Streamlit)
+├── app/
+│   └── app.py           # Aplicación interactiva (Streamlit)
 ├── data/
 │   ├── raw/             # Datos originales
 │   └── processed/       # Cartera evaluada (probabilidad, margen y decisión por cliente)
-├── docs/                # Informe ejecutivo (PDF)
+├── docs/                # Informe ejecutivo (PDF) y capturas de la aplicación
 ├── models/              # Modelo entrenado (.keras), preprocesador e historial
 ├── notebooks/
 │   └── 01_eda.ipynb     # Análisis exploratorio de datos
@@ -95,6 +96,7 @@ deep-retention/
 │   ├── calibration.py   # Calibración de probabilidades (Platt)
 │   ├── evaluate.py      # Métricas, gráficos y SHAP sobre el conjunto de prueba
 │   ├── predict.py       # Inferencia con el modelo guardado
+│   ├── explain.py       # Explicación SHAP de un cliente individual
 │   └── portfolio.py     # Aplica el sistema completo a la cartera
 ├── tests/               # Pruebas unitarias
 ├── requirements.txt
@@ -185,6 +187,24 @@ python -m src.portfolio
 | **ROI** | **317%** |
 
 Frente a retener a todos los clientes en riesgo sin filtro de rentabilidad, el sistema evita invertir $18.320 en clientes no rentables y $13.615 de pérdida esperada (ROI 285% → 317%).
+
+## Aplicación
+
+```bash
+streamlit run app/app.py
+```
+
+Se abre en el navegador (http://localhost:8501) con tres secciones:
+
+| Sección | Qué permite |
+|---|---|
+| **Panel de Cartera** | KPIs de la cartera (capital en riesgo, capital rescatable, inversión, ganancia neta y ROI), gráficos de riesgo y valor, matriz de decisión y lista descargable de clientes a contactar. Filtros por país, nivel de valor y decisión. |
+| **Buscador de Clientes** | Búsqueda por ID o apellido, o evaluación de un **cliente nuevo**: probabilidad de fuga, margen, decisión sugerida con el cálculo de la ganancia neta y los factores SHAP que explican el riesgo. |
+| **Simulador de Parámetros** | Ajuste de costos y efectividad de cada incentivo, umbrales de riesgo y supuestos de margen; compara contra el escenario base y muestra la sensibilidad de la ganancia al costo de cada incentivo. |
+
+![Panel de Cartera](docs/img/app_panel.png)
+![Buscador de Clientes](docs/img/app_buscador.png)
+![Simulador de Parámetros](docs/img/app_simulador.png)
 
 ## Pruebas
 

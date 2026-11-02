@@ -19,7 +19,7 @@ seaborn>=0.13
 plotly>=5.18
 
 # Aplicación interactiva
-streamlit>=1.32
+streamlit>=1.50
 
 # Notebooks
 jupyter>=1.0
