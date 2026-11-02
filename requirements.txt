@@ -22,3 +22,6 @@ streamlit>=1.32
 
 # Notebooks
 jupyter>=1.0
+
+# Pruebas
+pytest>=8.0

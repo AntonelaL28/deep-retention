@@ -6,7 +6,7 @@ valores y el proyecto sea reproducible.
 """
 from pathlib import Path
 
-# --- Rutas ---
+# Rutas
 ROOT_DIR = Path(__file__).resolve().parent.parent
 
 DATA_DIR = ROOT_DIR / "data"
@@ -18,13 +18,41 @@ REPORTS_DIR = ROOT_DIR / "reports"
 FIGURES_DIR = REPORTS_DIR / "figures"
 DOCS_DIR = ROOT_DIR / "docs"
 
-# --- Reproducibilidad ---
+# Reproducibilidad
 RANDOM_STATE = 42
 
-# --- División de datos ---
+# Division de datos
 TEST_SIZE = 0.15         # proporción del conjunto de prueba
 VALIDATION_SIZE = 0.15   # proporción del conjunto de validación
 
-# Los parámetros del dataset (columnas, objetivo) y los parámetros
-# financieros (costos y efectividad de incentivos) se agregarán en
-# fases posteriores, una vez confirmado el dataset.
+
+# Parámetros financieros (lógica de retención)
+# Umbrales de probabilidad de fuga (matriz de decisión comercial).
+HIGH_RISK_THRESHOLD = 0.65   # >= : riesgo alto
+LOW_RISK_THRESHOLD = 0.30    # <  : cliente estable, sin acción
+
+# Catálogo de incentivos de retención.
+INCENTIVE_CATALOG = {
+    "GESTOR_VIP": {
+        "name": "Gestor VIP y Tarifa Plana",
+        "cost": 250.0,
+        "effectiveness": 0.45,
+        "tiers": ["Superior"],
+    },
+    "EXONERACION": {
+        "name": "Exoneración de Comisiones",
+        "cost": 80.0,
+        "effectiveness": 0.30,
+        "tiers": ["Superior", "Medio"],
+    },
+    "BONIFICACION": {
+        "name": "Bonificación Transaccional",
+        "cost": 40.0,
+        "effectiveness": 0.25,
+        "tiers": ["Superior", "Medio", "Bajo"],
+    },
+}
+
+# Percentiles del saldo usados para definir los niveles de valor patrimonial.
+TIER_HIGH_QUANTILE = 0.75    # saldo >= p75 -> "Superior"
+TIER_LOW_QUANTILE = 0.40     # saldo >= p40 -> "Medio", si no -> "Bajo"
