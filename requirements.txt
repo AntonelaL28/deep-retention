@@ -15,7 +15,6 @@ shap>=0.44
 
 # Visualización
 matplotlib>=3.8
-seaborn>=0.13
 plotly>=5.18
 
 # Aplicación interactiva

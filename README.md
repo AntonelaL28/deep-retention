@@ -2,6 +2,13 @@
 
 Motor predictivo basado en **redes neuronales** que estima la probabilidad de abandono (churn) de los clientes de una entidad bancaria y, mediante un filtro de rentabilidad financiera neta, decide si vale la pena invertir en retenerlos.
 
+| | |
+|---|---|
+| **Materia** | Inteligencia Artificial: Aprendizaje Automático |
+| **Universidad** | Universidad Católica Andrés Bello (UCAB) |
+| **Profesor** | Gustavo La Fontaine |
+| **Integrantes** | Fernando Gil · Melanie Gamboa · Antonela Lauria · Javier Delmoral |
+
 ## Problema
 
 La retención indiscriminada de clientes reduce el margen operativo del banco: se gastan promociones y bonificaciones en clientes con saldos mínimos o que generan pérdidas. El sistema solo autoriza un plan de retención cuando el cliente representa una **ganancia potencial neta** tras descontar el costo del incentivo.
@@ -129,6 +136,19 @@ Instalar dependencias:
 ```bash
 pip install -r requirements.txt
 ```
+
+## Reproducir desde cero
+
+Con el entorno activado, estos comandos regeneran todos los resultados en orden:
+
+```bash
+python -m src.train        # 1. Entrena la red y la calibra       -> models/
+python -m src.evaluate     # 2. Métricas, gráficos y SHAP          -> reports/
+python -m src.portfolio    # 3. Evalúa la cartera completa         -> data/processed/, reports/
+streamlit run app/app.py   # 4. Abre la aplicación
+```
+
+El repositorio ya incluye el modelo entrenado y los resultados, por lo que se puede ir directo al paso 4. Volver a entrenar puede producir variaciones mínimas en las métricas según el sistema operativo.
 
 ## Entrenamiento del modelo
 
