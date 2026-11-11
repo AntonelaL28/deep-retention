@@ -1,7 +1,3 @@
-# Deep Retention — Sistema de Retención Selectiva de Clientes
-
-Motor predictivo basado en **redes neuronales** que estima la probabilidad de abandono (churn) de los clientes de una entidad bancaria y, mediante un filtro de rentabilidad financiera neta, decide si vale la pena invertir en retenerlos.
-
 | | |
 |---|---|
 | **Materia** | Inteligencia Artificial: Aprendizaje Automático |
@@ -9,8 +5,13 @@ Motor predictivo basado en **redes neuronales** que estima la probabilidad de ab
 | **Profesor** | Gustavo La Fontaine |
 | **Integrantes** | Fernando Gil · Melanie Gamboa · Antonela Lauria · Javier Delmoral |
 
-## Problema
+# Link del Informe Ejecutivo del Proyecto
+https://docs.google.com/document/d/1xrjeh8SBMbmCZ6OFWoOKrNIxPiXe-cqX/edit?usp=sharing&ouid=104416054958940764766&rtpof=true&sd=true
 
+# Breve descripción del Sistema de Retención Selectiva de Clientes
+Motor predictivo basado en **redes neuronales** que estima la probabilidad de abandono (churn) de los clientes de una entidad bancaria y, mediante un filtro de rentabilidad financiera neta, decide si vale la pena invertir en retenerlos.
+
+## Problema
 La retención indiscriminada de clientes reduce el margen operativo del banco: se gastan promociones y bonificaciones en clientes con saldos mínimos o que generan pérdidas. El sistema solo autoriza un plan de retención cuando el cliente representa una **ganancia potencial neta** tras descontar el costo del incentivo.
 
 ## Regla de decisión
